@@ -2,6 +2,7 @@ package com.antra.sep.springiocdemo.service;
 
 import com.antra.sep.springiocdemo.repository.MenuRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 @Service
