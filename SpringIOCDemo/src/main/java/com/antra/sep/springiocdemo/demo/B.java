@@ -5,10 +5,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class B {
-
-    A a;
     @Autowired
-    public B(A a) {
-        this.a = a;
-    }
+    A a;
+
 }
