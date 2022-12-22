@@ -1,0 +1,10 @@
+<p>ingredient-list works!</p>
+
+<div>
+  <mat-selection-list #ingredient [multiple]="false">
+    <mat-list-option *ngFor="let ingredient of ingredientList" [value]="ingredient">
+      {{ingredient.name}}
+    </mat-list-option>
+  </mat-selection-list>
+
+</div>
