@@ -2,7 +2,6 @@ package com.antra.sep.restapidemo.controller;
 
 import com.antra.sep.restapidemo.entity.Ingredient;
 import com.antra.sep.restapidemo.exception.IngredientNotFoundException;
-import com.antra.sep.restapidemo.repository.IngredientRepository;
 import com.antra.sep.restapidemo.request.IngredientUpdateRequest;
 import com.antra.sep.restapidemo.response.ErrorResponse;
 import com.antra.sep.restapidemo.response.IngredientResponse;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/ingredient")
