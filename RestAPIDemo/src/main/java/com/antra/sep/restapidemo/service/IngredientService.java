@@ -8,7 +8,7 @@ import com.antra.sep.restapidemo.response.PageResponse;
 import java.util.List;
 
 public interface IngredientService {
-    Ingredient getIngredientById(int id);
+    IngredientResponse getIngredientById(int id);
 
     List<IngredientResponse> getAllIngredient();
 

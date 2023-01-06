@@ -8,8 +8,12 @@ import com.antra.sep.restapidemo.response.IngredientResponse;
 import com.antra.sep.restapidemo.response.PageResponse;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,12 +26,16 @@ public class IngredientServiceImpl implements IngredientService {
     IngredientRepository ingredientRepository;
 
     @Override
-    public Ingredient getIngredientById(int id) {
+    @Cacheable(cacheNames = "ingredient", key = "#id")
+    public IngredientResponse getIngredientById(int id) {
         Optional<Ingredient> ingredientOptional = ingredientRepository.findById(id);
-        return ingredientOptional.orElseThrow(IngredientNotFoundException::new);
+        IngredientResponse resp = new IngredientResponse();
+        BeanUtils.copyProperties(ingredientOptional.get(), resp);
+        return resp;
     }
 
     @Override
+    @Cacheable(cacheNames = "ingredient", key = "'AllIngredient'")
     public List<IngredientResponse> getAllIngredient() {
         return ingredientRepository.findAll().stream().map( ingredient -> {
             IngredientResponse resp = new IngredientResponse();
@@ -56,6 +64,7 @@ public class IngredientServiceImpl implements IngredientService {
     }
 
     @Override
+    @CacheEvict(cacheNames = "ingredient", allEntries = true)
     public IngredientResponse addIngredient(IngredientUpdateRequest request) {
         Ingredient ingredient = new Ingredient();
         ingredient.setName(request.getName());
@@ -66,8 +75,9 @@ public class IngredientServiceImpl implements IngredientService {
     }
 
     @Override
+    @CachePut(cacheNames = "ingredient", key = "#request.id")
     public IngredientResponse updateIngredient(IngredientUpdateRequest request) {
-        Ingredient ingredient = this.getIngredientById(request.getId());
+        Ingredient ingredient = ingredientRepository.findById(request.getId()).get();
         ingredient.setName(request.getName());
         Ingredient savedIngredient = ingredientRepository.save(ingredient);
         IngredientResponse resp = new IngredientResponse();
@@ -77,7 +87,7 @@ public class IngredientServiceImpl implements IngredientService {
 
     @Override
     public IngredientResponse deleteIngredientById(int id) {
-        Ingredient ingredient = this.getIngredientById(id);
+        Ingredient ingredient = ingredientRepository.findById(id).get();
         ingredientRepository.deleteById(id);
         IngredientResponse resp = new IngredientResponse();
         BeanUtils.copyProperties(ingredient, resp);

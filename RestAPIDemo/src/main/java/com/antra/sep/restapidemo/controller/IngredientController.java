@@ -26,10 +26,7 @@ public class IngredientController {
 
     @GetMapping("/{id}")
     public ResponseEntity<IngredientResponse> getIngredientById(@PathVariable int id) {
-        Ingredient ingredient = ingredientService.getIngredientById(id);
-        IngredientResponse resp = new IngredientResponse();
-        resp.setId(ingredient.getId());
-        resp.setName(ingredient.getName());
+        IngredientResponse resp = ingredientService.getIngredientById(id);
         return ResponseEntity.ok(resp);
     }
 
